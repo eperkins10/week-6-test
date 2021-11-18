@@ -1,11 +1,12 @@
 import { Builder, Capabilities, By } from "selenium-webdriver"
+const {checkBox} = require('./expect.ts')
 
 const chromedriver = require('chromedriver')
 
 const driver = new Builder().withCapabilities(Capabilities.chrome()).build()
 
 beforeAll(async () => {
-    await driver.get('http://localhost:4000')
+    await driver.get('http://127.0.0.1:5500/tictacjs.html')
 })
 
 afterAll(async () => {
@@ -16,34 +17,30 @@ test('I can start a game', async () => {
 
     let button = await (await driver).findElement(By.id('start-game'));
     await button.click();
+
+});
+it('I make a move', async () => {
+    await checkBox(driver)
+    // let makeMove = await(await driver).findElement(By.xpath('//*[@id="cell-0"]'))
+    // await makeMove.click()
+    await driver.sleep(2000)
+})
+it('I make a second move', async () => {
+
+    let makeMove = await(await driver).findElement(By.xpath('//*[@id="cell-4"]'))
+    await makeMove.click()
+    await driver.sleep(2000)
+})
+it('I make win a game', async () => {
+
+    let makeMove = await(await driver).findElement(By.xpath('//*[@id="cell-8"]'))
+    await makeMove.click()
+    await driver.sleep(2000)
+})
+it('I can restart a game', async () => {
+
+    driver.get("http://127.0.0.1:5500/tictacjs.html");
+    driver.navigate().refresh();
+    await driver.sleep(2000)
     
 });
-
-test('I can place a piece', async () => {
-
-    let placePiece = await(await driver).findElement(By.xpath('//*[@id="cell-0"]'))
-    await placePiece.click()
-    await driver.sleep(5000)
-    
-})
-
-test('I can place another piece', async () => {
-
-    let anotherPiece = await(await driver).findElement(By.xpath('//*[@id="cell-3"]'))
-    await anotherPiece.click()
-    await driver.sleep(5000)
-})
-
-test('I can win da game', async () => {
-
-    let finalMove = await(await driver).findElement(By.xpath('//*[@id="cell-6"]'))
-    await finalMove.click()
-    await driver.sleep(5000)
-})
-
-test('I can refresh the game', async () => {
-    
-    driver.get("http://127.0.0.1:5500/tictacjs.html")
-    driver.navigate().refresh()
-    await driver.sleep(5000)
-})
